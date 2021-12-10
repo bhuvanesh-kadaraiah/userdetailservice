@@ -67,4 +67,11 @@ public class UserController {
 		return new ResponseEntity<>(savedUser,HttpStatus.OK);
 		
 	}
+	
+	@PostMapping("/saveUser/index")
+	public ResponseEntity<User> saveUserAtAnyIndex(@PathVariable Integer index,@RequestBody User user) {
+		User savedUser = service.saveUserAtAnyIndex(index,user);
+		return new ResponseEntity<>(savedUser,HttpStatus.OK);
+		
+	}
 }

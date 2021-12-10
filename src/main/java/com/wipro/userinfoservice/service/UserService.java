@@ -56,4 +56,14 @@ public class UserService {
 		return userToSave;
 	}
 	
+	public User saveUserAtAnyIndex(int index,User user) {
+		List<User> users = repository.findAll();
+		User userToUpdate = users.get(index);
+		userToUpdate.setBody(user.getBody());
+		userToUpdate.setUserid(user.getUserid());
+		userToUpdate.setTitle(user.getTitle());
+		repository.save(userToUpdate);
+		return userToUpdate;
+	}
+	
 }
