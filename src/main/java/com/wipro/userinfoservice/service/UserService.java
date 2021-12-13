@@ -2,11 +2,8 @@ package com.wipro.userinfoservice.service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.IntStream;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.wipro.userinfoservice.bean.User;
 import com.wipro.userinfoservice.repository.UserRespository;
 
@@ -18,6 +15,16 @@ public class UserService {
 	
 	public List<User> getAllUsers(){
 		return repository.findAll();
+	}
+	
+	public User replaceUser(User newUser) {
+		return repository.findById(newUser.getId())
+			      .map(user -> {
+			    	  user.setBody(newUser.getBody());
+			    	  user.setTitle(newUser.getTitle());
+			        return repository.save(user);
+			      }).orElseGet(() -> 
+			      		{ return repository.save(newUser);});
 	}
 	
 	public Optional<User> getUsersById(Integer id){
@@ -39,26 +46,9 @@ public class UserService {
 		return repository.findDistinctUserId();
 	}
 	
-	public User saveFourthUser(User fourthUser) {
-		List<User> users = repository.findAll();
-		User userToSave = new User();
-		int index = 0;
-		for(User user : users) {
-			if(index == 3) {
-				userToSave = user;
-				break;
-			}
-			index++;
-		}
-		userToSave.setTitle(fourthUser.getTitle());
-		userToSave.setBody(fourthUser.getBody());
-		repository.save(userToSave);
-		return userToSave;
-	}
-	
 	public User saveUserAtAnyIndex(int index,User user) {
 		List<User> users = repository.findAll();
-		User userToUpdate = users.get(index);
+		User userToUpdate = users.get(--index);
 		userToUpdate.setBody(user.getBody());
 		userToUpdate.setUserid(user.getUserid());
 		userToUpdate.setTitle(user.getTitle());
@@ -66,4 +56,6 @@ public class UserService {
 		return userToUpdate;
 	}
 	
+	
+					
 }
